@@ -1,0 +1,36 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@prisma/extension-accelerate": "^2.0.2",
+    "@types/cookies": "^0.9.1",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.3",
+    "@types/jsonwebtoken": "^9.0.10",
+    "axios": "^1.11.0",
+    "body-parser": "^2.2.0",
+    "cookies": "^0.9.1",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.0",
+    "express": "^5.1.0",
+    "finnhub": "^2.0.7",
+    "jsonwebtoken": "^9.0.2",
+    "socket.io": "^4.8.1",
+    "zod": "^4.0.10"
+  },
+  "devDependencies": {
+    "@prisma/client": "^6.13.0",
+    "@types/socket.io": "^3.0.1",
+    "i": "^0.3.7",
+    "npm": "^11.5.2",
+    "prisma": "^6.13.0"
+  }
+}

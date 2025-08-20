@@ -1,0 +1,1 @@
+{"root":["./src/index.ts","./src/stocks/index.ts","./src/stocks/buy/index.ts","./src/stocks/popular/index.ts","./src/stocks/popular/orderbooks.ts","./src/stocks/search/index.ts","./src/user/index.ts","./src/utils/prismaclient.ts","./src/utils/tokencheck.ts","./src/utils/userexists.ts"],"version":"5.8.3"}
