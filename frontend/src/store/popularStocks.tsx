@@ -1,6 +1,6 @@
 import {atom} from 'jotai'
 import { type result } from '../assets/types/stockType'
-type StockBuyer = {
+export type StockBuyer = {
     price : number , 
     quantity : number,
     orderType : "sell" | "buy"
