@@ -15,10 +15,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = getOrderBook;
 exports.makeBid = makeBid;
 exports.matchFound = matchFound;
+exports.getMarketPrice = getMarketPrice;
 const prismaClient_1 = __importDefault(require("../../utils/prismaClient"));
 const __1 = require("../..");
-let sellAAPL = [{ email: "", price: 82, quantity: 3 }, { email: "M1", price: 80, quantity: 5 }, { email: "", price: 78, quantity: 1 }];
-let buyAAPL = [{ email: "", price: 78, quantity: 1 }, { email: "M1", price: 80, quantity: 5 }, { email: "", price: 82, quantity: 3 }];
+let sellAAPL = [{ email: "admin@gmail.com", price: 802.63, quantity: 3 }, { email: "admin@gmail.com", price: 800.98, quantity: 5 }, { email: "admin@gmail.com", price: 789.43, quantity: 3 }];
+let buyAAPL = [{ email: "admin@gmail.com", price: 783.32, quantity: 2 }, { email: "M1", price: 80, quantity: 5 }, { email: "", price: 82, quantity: 3 }];
 let sellMSFT = [];
 let buyMSFT = [];
 let sellNVDA = [];
@@ -62,31 +63,98 @@ function getOrderBook() {
         "sellNFLX": sellNFLX,
     });
 }
-function makeBid({ userEmail, price, quantity, orderType, symbol }) {
-    let item = {
-        email: userEmail,
-        price: price,
-        quantity: quantity
-    };
-    if (orderType == "sell") {
-        const sellArray = sellArrays[symbol];
-        console.log("inside the sell");
-        if (!sellArray) {
-            return "no symbol  matched ";
+function makeBid(_a) {
+    return __awaiter(this, arguments, void 0, function* ({ userEmail, price, quantity, orderType, symbol }) {
+        let item = {
+            email: userEmail,
+            price: price,
+            quantity: quantity
+        };
+        if (orderType == "sell") {
+            const sellArray = sellArrays[symbol];
+            console.log("inside the sell");
+            if (!sellArray) {
+                return "no symbol  matched ";
+            }
+            try {
+                const user = yield prisma.user.findFirst({
+                    where: {
+                        email: userEmail
+                    },
+                    include: {
+                        stocks: true
+                    }
+                });
+                const stock = user === null || user === void 0 ? void 0 : user.stocks.find((stock) => stock.symbol === symbol);
+                const stockId = stock === null || stock === void 0 ? void 0 : stock.id;
+                yield prisma.$transaction([
+                    prisma.stocks.update({
+                        where: {
+                            id: stockId
+                        },
+                        data: {
+                            quantity: {
+                                decrement: quantity
+                            }
+                        }
+                    }),
+                    prisma.trades.create({
+                        data: {
+                            userId: userEmail,
+                            price: price,
+                            quantity: quantity,
+                            orderType: orderType,
+                            date: new Date(Date.now()),
+                            completed: false,
+                            symbol: symbol
+                        }
+                    })
+                ]);
+            }
+            catch (e) {
+                console.log("some internal error at make bid  ", e);
+            }
+            sellArrays[symbol].push(item);
+            sellArrays[symbol].sort((a, b) => a.price - b.price);
+            console.log(sellArrays[symbol], "selll");
         }
-        sellArrays[symbol].push(item);
-        sellArrays[symbol].sort((a, b) => a.price < b.price ? 1 : -1);
-    }
-    else {
-        console.log("inside the buy of makeBid ");
-        const buyArray = buyArrays[symbol];
-        if (!buyArray) {
-            return "no symbol  matched ";
+        else {
+            console.log("inside the buy of makeBid ");
+            const buyArray = buyArrays[symbol];
+            if (!buyArray) {
+                return "no symbol  matched ";
+            }
+            try {
+                yield prisma.$transaction([
+                    prisma.user.update({
+                        where: {
+                            email: userEmail
+                        },
+                        data: {
+                            balance: { decrement: parseFloat((price * quantity).toFixed(2)) }
+                        }
+                    }),
+                    prisma.trades.create({
+                        data: {
+                            userId: userEmail,
+                            price: price,
+                            quantity: quantity,
+                            orderType: orderType,
+                            date: new Date(Date.now()),
+                            completed: false,
+                            symbol: symbol
+                        }
+                    })
+                ]);
+            }
+            catch (e) {
+                console.log("some internal error at make bid  ", e);
+            }
+            buyArrays[symbol].push(item);
+            buyArrays[symbol].sort((a, b) => b.price - a.price);
+            console.log(buyArrays[symbol], "  buy ");
         }
-        buyArrays[symbol].push(item);
-        buyArrays[symbol].sort((a, b) => a.price < b.price ? -1 : 1);
-        console.log(buyArrays[symbol]);
-    }
+    });
 }
 //userEmail khareedne aayA hai stock owener k pass stocks hai 
 function flipStocks(arr_1, index_1, stockOwnerEmail_1, _a) {
@@ -110,12 +178,14 @@ function flipStocks(arr_1, index_1, stockOwnerEmail_1, _a) {
             ownerOrderType = "sell";
         }
         if (quantity === arr[index].quantity) {
+            // console.log("match is found");
             yield prisma.$transaction((tx) => __awaiter(this, void 0, void 0, function* () {
                 const userHasStockSymbol = yield tx.stocks.findFirst({
                     where: { userId: userEmail, symbol: symbol }
                 });
                 if (userHasStockSymbol) {
-                    let averagePrice = parseFloat(((userHasStockSymbol.averagePrice * userHasStockSymbol.quantity + price * quantity) / userHasStockSymbol.quantity + quantity).toFixed(4));
+                    let averagePrice = parseFloat(((userHasStockSymbol.averagePrice * userHasStockSymbol.quantity + price * quantity) /
+                        (userHasStockSymbol.quantity + quantity)).toFixed(2));
                     yield tx.stocks.update({
                         where: { id: userHasStockSymbol.id },
                         data: {
@@ -135,10 +205,14 @@ function flipStocks(arr_1, index_1, stockOwnerEmail_1, _a) {
                         }
                     });
                 }
-                yield tx.stocks.delete({
+                console.log(stockId, " stock idddd");
+                yield tx.stocks.update({
                     where: {
                         id: stockId
                     },
+                    data: {
+                        quantity: { decrement: quantity }
+                    }
                 }),
                     yield tx.user.update({
                         where: { email: userEmail },
@@ -157,7 +231,8 @@ function flipStocks(arr_1, index_1, stockOwnerEmail_1, _a) {
                         date: new Date(Date.now()),
                         symbol: symbol,
                         price: price,
-                        quantity: quantity
+                        quantity: quantity,
+                        completed: true
                     }
                 });
                 yield tx.trades.create({
@@ -167,11 +242,12 @@ function flipStocks(arr_1, index_1, stockOwnerEmail_1, _a) {
                         date: new Date(Date.now()),
                         symbol: symbol,
                         price: price,
-                        quantity: quantity
+                        quantity: quantity,
+                        completed: true
                     }
                 });
             }));
-            arr = arr.splice(index, index + 1); // removing it from the array 
+            arr.splice(index, 1); // removing it from the array 
         }
         else {
             yield prisma.$transaction((tx) => __awaiter(this, void 0, void 0, function* () {
@@ -182,7 +258,8 @@ function flipStocks(arr_1, index_1, stockOwnerEmail_1, _a) {
                     }
                 });
                 if (userHasStockSymbol) {
-                    let averagePrice = parseFloat(((userHasStockSymbol.averagePrice * userHasStockSymbol.quantity + price * quantity) / userHasStockSymbol.quantity + quantity).toFixed(4));
+                    let averagePrice = parseFloat(((userHasStockSymbol.averagePrice * userHasStockSymbol.quantity + price * quantity) /
+                        (userHasStockSymbol.quantity + quantity)).toFixed(2));
                     yield tx.stocks.update({
                         where: {
                             id: userHasStockSymbol.id
@@ -229,7 +306,8 @@ function flipStocks(arr_1, index_1, stockOwnerEmail_1, _a) {
                         date: new Date(Date.now()),
                         symbol: symbol,
                         price: price,
-                        quantity: quantity
+                        quantity: quantity,
+                        completed: true
                     }
                 });
                 yield tx.trades.create({
@@ -239,12 +317,14 @@ function flipStocks(arr_1, index_1, stockOwnerEmail_1, _a) {
                         date: new Date(Date.now()),
                         symbol: symbol,
                         price: price,
-                        quantity: quantity
+                        quantity: quantity,
+                        completed: true
                     }
                 });
             }));
             arr[index].quantity = arr[index].quantity - quantity;
         }
+        getOrderBook();
     });
 }
 function matchFound(_a) {
@@ -255,24 +335,34 @@ function matchFound(_a) {
             if (!buyArray) {
                 return "no symbol  matched ";
             }
-            let index = binarySearch(price, buyArray, true);
-            if (index !== -1) {
-                if (remainingQuantity <= buyArray[index].quantity) {
-                    remainingQuantity = 0;
-                    const response = yield flipStocks(buyArray, index, userEmail, { userEmail: buyArray[index].email, price, quantity, orderType, symbol });
-                    return response;
+            let index = binarySearch(price, buyArray, false, userEmail);
+            if (buyArray[index].price >= price) {
+                let i = index;
+                while (i < buyArray.length && remainingQuantity != 0) {
+                    if (remainingQuantity <= buyArray[i].quantity) {
+                        remainingQuantity = 0;
+                        try {
+                            const response = yield flipStocks(buyArray, i, userEmail, { userEmail: buyArray[i].email, price, quantity, orderType, symbol });
+                            return response;
+                        }
+                        catch (e) {
+                            console.log(e);
+                            return e;
+                        }
+                    }
+                    else {
+                        const response = yield flipStocks(buyArray, i, userEmail, { userEmail: buyArray[i].email, price, quantity: buyArray[i].quantity, orderType, symbol });
+                        remainingQuantity = remainingQuantity - buyArray[i].quantity;
+                        i++;
+                    }
                 }
-                else {
-                    const response = yield flipStocks(buyArray, index, userEmail, { userEmail: buyArray[index].email, price, quantity: buyArray[index].quantity, orderType, symbol });
-                    remainingQuantity = remainingQuantity - buyArray[index].quantity;
+                if (remainingQuantity != 0) {
                     makeBid({ userEmail, price, quantity: remainingQuantity, orderType: "sell", symbol: symbol });
-                    return response;
                 }
             }
             else {
                 makeBid({ userEmail, price, quantity: remainingQuantity, orderType: "sell", symbol: symbol });
             }
-            getOrderBook();
             return Promise.resolve("ok");
         }
         else {
@@ -280,18 +370,29 @@ function matchFound(_a) {
             if (!sellArray) {
                 return "no symbol  matched ";
             }
-            let index = binarySearch(price, sellArray, false);
-            if (index !== -1) {
-                if (remainingQuantity <= sellArray[index].quantity) {
-                    remainingQuantity = 0;
-                    const response = yield flipStocks(sellArray, index, sellArray[index].email, { userEmail, price, quantity, orderType, symbol });
-                    return response;
+            let index = binarySearch(price, sellArray, true, userEmail);
+            if (sellArray[index].price <= price) {
+                let i = index;
+                while (i < sellArray.length && remainingQuantity != 0) {
+                    if (remainingQuantity <= sellArray[i].quantity) {
+                        remainingQuantity = 0;
+                        try {
+                            const response = yield flipStocks(sellArray, i, sellArray[i].email, { userEmail: userEmail, price, quantity, orderType, symbol });
+                            return response;
+                        }
+                        catch (e) {
+                            console.log(e);
+                            return e;
+                        }
+                    }
+                    else {
+                        const response = yield flipStocks(sellArray, i, sellArray[i].email, { userEmail: userEmail, price, quantity: sellArray[i].quantity, orderType, symbol });
+                        remainingQuantity = remainingQuantity - sellArray[i].quantity;
+                        i++;
+                    }
                 }
-                else if (remainingQuantity > sellArray[index].quantity) {
-                    const response = yield flipStocks(sellArray, index, sellArray[index].email, { userEmail, price, quantity, orderType, symbol });
-                    remainingQuantity = remainingQuantity - sellArray[index].quantity;
+                if (remainingQuantity != 0) {
                     makeBid({ userEmail, price, quantity: remainingQuantity, orderType: "buy", symbol: symbol });
-                    return response;
                 }
             }
             else {
@@ -301,13 +402,17 @@ function matchFound(_a) {
         return Promise.resolve("okk");
     });
 }
-function binarySearch(price, arr, asc) {
+function binarySearch(price, arr, asc, userEmail) {
     let low = 0;
     let high = arr.length;
+    let mid = Math.floor(low + (high - low) / 2);
     while (low < high) {
-        let mid = Math.floor(low + (high - low) / 2);
-        if (arr[mid].price === price) {
-            return mid;
+        mid = Math.floor(low + (high - low) / 2);
+        if (arr[mid].price === price && arr[mid].email != userEmail) {
+            if (asc)
+                high = mid;
+            else
+                low = mid + 1;
         }
         else if (arr[mid].price > price) {
             if (asc)
@@ -322,5 +427,54 @@ function binarySearch(price, arr, asc) {
                 high = mid;
         }
     }
-    return -1;
+    if (low >= arr.length)
+        return arr.length;
+    return low;
+}
+function getMarketPrice(symbol, quantity, orderType, email) {
+    const buy = buyArrays[symbol];
+    const sell = sellArrays[symbol];
+    if (buy == null || sell == null) {
+        return { message: "symbol not found " };
+    }
+    let remainingQuantity = quantity;
+    let price = 0;
+    if (orderType === "buy") {
+        for (let i = 0; i < sell.length && remainingQuantity > 0; i++) {
+            if (remainingQuantity >= sell[i].quantity && sell[i].email != email) {
+                remainingQuantity -= sell[i].quantity;
+                price += sell[i].price;
+            }
+            else if (remainingQuantity < sell[i].quantity && sell[i].email != email) {
+                price = remainingQuantity * sell[i].price;
+                remainingQuantity = 0;
+            }
+            if (remainingQuantity === 0)
+                break;
+        }
+    }
+    else {
+        for (let i = 0; i < buy.length && remainingQuantity > 0; i++) {
+            if (remainingQuantity >= buy[i].quantity && buy[i].email != email) {
+                remainingQuantity -= buy[i].quantity;
+                price += sell[i].price * sell[i].quantity;
+            }
+            else if (remainingQuantity < buy[i].quantity && buy[i].email != email) {
+                price = remainingQuantity * buy[i].price;
+                remainingQuantity = 0;
+            }
+            if (remainingQuantity === 0)
+                break;
+        }
+    }
+    let averagePrice = 0;
+    if (remainingQuantity != quantity) {
+        averagePrice = (parseFloat)((price / (quantity - remainingQuantity)).toFixed(2));
+    }
+    return {
+        message: "Price fetched ",
+        remainingQuantity: remainingQuantity,
+        price: price,
+        averagePrice: averagePrice
+    };
 }

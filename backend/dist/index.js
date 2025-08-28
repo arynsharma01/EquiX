@@ -70,6 +70,7 @@ exports.io = new socket_io_1.Server(server, {
 });
 exports.io.on("connection", (socket) => {
     console.log("🔌 Client connected:", socket.id);
+    (0, orderbooks_1.default)();
     socket.on("disconnect", () => {
         console.log("❌ Client disconnected:", socket.id);
     });
@@ -97,7 +98,6 @@ app.post('/testing', tokenCheck_1.default, (req, res) => __awaiter(void 0, void 
     });
 }));
 app.get('/test23', (req, res) => {
-    (0, orderbooks_1.default)();
     return res.status(200).json({
         message: "ok"
     });

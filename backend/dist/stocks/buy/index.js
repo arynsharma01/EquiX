@@ -42,12 +42,14 @@ exports.buyStocksRouter.post('/new/stock', tokenCheck_1.default, (req, res) => _
     if (!user) {
         return res.status(401).redirect('/signup');
     }
-    if (orderType === "buy" && price * quantity < user.balance) {
+    if (orderType === "buy" && price * quantity > user.balance) {
+        console.log(price * quantity);
+        console.log(user.balance);
         return res.status(200).json({
             message: "insufficient balance "
         });
     }
-    else {
+    else if (orderType === "sell") {
         const currStock = user.stocks.find((stock) => { return stock.symbol === symbol; });
         if (!currStock) {
             return res.status(200).json({
@@ -63,5 +65,20 @@ exports.buyStocksRouter.post('/new/stock', tokenCheck_1.default, (req, res) => _
     (0, orderbooks_1.matchFound)({ userEmail: email, price: price, quantity: quantity, symbol: symbol, orderType });
     return res.status(200).json({
         message: "Transaction successfull"
+    });
+}));
+exports.buyStocksRouter.post('/get/market/price', tokenCheck_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { quantity, symbol, orderType, email } = req.body;
+    if (!quantity || !symbol || !orderType) {
+        return res.json({
+            message: "quantity not found"
+        });
+    }
+    const result = (0, orderbooks_1.getMarketPrice)(symbol, quantity, orderType, email);
+    return res.json({
+        message: result.message,
+        quantity: result.remainingQuantity,
+        price: result.price,
+        averagePrice: result.averagePrice
     });
 }));

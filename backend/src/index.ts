@@ -27,6 +27,7 @@ export const io  = new Server(server,{
 
 io.on("connection", (socket) => {
   console.log("🔌 Client connected:", socket.id);
+  getOrderBook()
 
   socket.on("disconnect", () => {
     console.log("❌ Client disconnected:", socket.id);
@@ -61,7 +62,7 @@ app.post('/testing' ,tokenCheck, async (req:Request , res : Response)=>{
     })
 })
 app.get('/test23', (req : Request , res : Response)=>{
-  getOrderBook()
+  
   return res.status(200).json({
     message :"ok"
   })

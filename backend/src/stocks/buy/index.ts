@@ -2,7 +2,7 @@ import express, { Request, Response } from "express";
 import tokenCheck from "../../utils/tokenCheck";
 
 import singlePrismaClient from "../../utils/prismaClient";
-import { matchFound } from "../popular/orderbooks";
+import { getMarketPrice, matchFound } from "../popular/orderbooks";
 import { string } from "zod";
 
 export const buyStocksRouter = express()
@@ -33,14 +33,17 @@ buyStocksRouter.post('/new/stock', tokenCheck, async (req: Request, res: Respons
     if (!user) {
         return res.status(401).redirect('/signup')
     }
-    if (orderType === "buy" && price * quantity < user.balance) {
+    if (orderType === "buy" && price * quantity > user.balance) {
+        console.log(price *quantity );
+        console.log(user.balance );
+        
     
         return res.status(200).json({
             message: "insufficient balance "
         })
 
     }
-    else {
+    else if(orderType === "sell") {
         const currStock = user.stocks.find((stock)=>{return stock.symbol === symbol})
         if(!currStock){
             return res.status(200).json({
@@ -56,7 +59,7 @@ buyStocksRouter.post('/new/stock', tokenCheck, async (req: Request, res: Respons
     }
 
 
-    matchFound({ userEmail: email, price: price as number, quantity: quantity as number, symbol: symbol as string, orderType })
+    matchFound({ userEmail: email, price: price as number, quantity: quantity as number, symbol: symbol as string, orderType  })
 
 
     return res.status(200).json({
@@ -65,3 +68,20 @@ buyStocksRouter.post('/new/stock', tokenCheck, async (req: Request, res: Respons
     })
 })
 
+buyStocksRouter.post('/get/market/price',tokenCheck, async (req : Request , res: Response )=>{
+    
+    const {quantity,symbol, orderType, email } = req.body
+    if(!quantity || !symbol || !orderType ){
+        return res.json({
+            message : "quantity not found"
+        })
+    }
+    const result = getMarketPrice(symbol , quantity ,orderType , email )
+    return res.json({
+        message  : result.message,
+        quantity : result.remainingQuantity,
+        price : result.price,
+        averagePrice : result.averagePrice
+    })
+
+})
