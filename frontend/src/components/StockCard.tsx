@@ -3,7 +3,7 @@ import type { result, ResultChildType } from "../assets/types/stockType";
 type StockCardProps = result & ResultChildType
 export default function StockCard({ symbol, longName, closingValues, gainValue, gainPercent }: StockCardProps) {
     const navigate = useNavigate()
-    return <div className="flex flex-col border bg-white border-gray-200 hover:border-blue-300 rounded-2xl p-4 md:w-lg hover:cursor-pointer transition-all duration-300"
+    return <div className="flex flex-col border bg-white border-gray-200 hover:border-blue-300 rounded-2xl p-4 w-full hover:cursor-pointer transition-all duration-300"
 
         onClick={() => {
             navigate('/stock/info', {
@@ -14,7 +14,7 @@ export default function StockCard({ symbol, longName, closingValues, gainValue, 
         }}
 
     >
-        <div className="flex justify-between items-center w-full">
+        <div className="flex justify-between items-center lg:min-w-lg w-full">
             <div className="flex flex-col gap-2">
                 <div className="text-xl font-bold">
                     {symbol}

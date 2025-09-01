@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Input from "./Input";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ScaleLoader } from "react-spinners";
 
@@ -8,11 +8,28 @@ export default function Signin() {
 
     const [email, setEmail] = useState<string>("")
     const [password, setPassword] = useState<string>("")
-    
+    const location = useLocation()
     const [passwordMatch, setPasswordMatch] = useState<boolean>(false)
     const navigate = useNavigate()
     const [loader, setLoader] = useState<boolean>(false)
     const [response , setResponse] = useState<string>("")
+    const from = location.state?.from?.pathname  ||'/dashboard'
+    useEffect(()=>{
+        async function signedIn() {
+            try{
+                await axios.get('http://localhost:3000/api/already/signed',{
+                    withCredentials : true
+                })
+                navigate(from,{replace : true})
+            }
+            catch(e){
+                console.log("not signed in ");
+                
+            }
+            
+        }
+        signedIn()
+    })
     async function userSignin() {
         setLoader(true)
         const payload = {
@@ -22,12 +39,14 @@ export default function Signin() {
 
         }
         try{
-            const res = await axios.post('http://localhost:3000/api/user/signin', payload)
+            const res = await axios.post('http://localhost:3000/api/user/signin', payload, {
+                withCredentials : true 
+            })
             console.log(res.data);
             
             setResponse(res.data.message)
             setLoader(false)
-            navigate('/dashboard' ,{replace : true})
+            navigate(from ,{replace : true})
             
         }
         catch(e : any ){

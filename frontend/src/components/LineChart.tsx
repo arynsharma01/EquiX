@@ -32,7 +32,6 @@ export default function LineChart({ labels, values , postive }: LineChartProps) 
 
   
   const updatedLables = labels.map((label)=>{
-    console.log("in for each " + label);
     
     return label.toString().split(' ')[0].split(',')[0]
   })

@@ -1,27 +1,29 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+
 import './App.css'
 import Layout from './layout'
 import Market from './components/Market'
 import StockDataCard from './components/StockDataCard'
-import ChartRender from './components/ChartRender'
+
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Signup from './components/Signup'
 import Signin from './components/Signin'
 import TestSocket from './components/TestSocket'
 import StockBuy from './components/StockBuy'
+import Transactions from './components/Transactions'
+import Portfolio from './components/Portfolio'
 
 
 
 function App() {
-  const [count, setCount] = useState(0)
+  
 
   return (
     <>
 
-      <div className="bg-gray-100  w-full min-h-screen">
+      <div className="bg-gray-200  w-full min-h-screen">
         <BrowserRouter>
+        <Layout>
         <Routes>
           {/* <Route path="/" element={<Layout />}> */}
           <Route  path = "/dashboard" element={<Market />} />
@@ -30,9 +32,12 @@ function App() {
           <Route  path = "/signin" element={<Signin />} />
           <Route  path = "/testsocket" element={<TestSocket />} />
           <Route  path = "/exchange" element={<StockBuy />} />
+          <Route  path = "/transactions" element={<Transactions />} />
+          <Route  path = "/portfolio" element={<Portfolio />} />
 
         {/* </Route> */}
         </Routes>
+        </Layout>
         </BrowserRouter>
         
         {/* <StockDataCard/> */}

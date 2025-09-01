@@ -2,7 +2,7 @@ import type StockType from "../assets/types/stockType"
 
 export default function Overview({ symbol, value, up, gainValue , gainPercent }: StockType) {
     return (
-        <div className="flex flex-col  bg-gray-200 p-4 rounded-xl  items-center justify-center md:w-lg ">
+        <div className="flex flex-col  bg-gray-200 p-4 rounded-xl  items-center justify-center w-full ">
 
             <div className="text-xl ">
                 {symbol}

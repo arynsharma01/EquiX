@@ -27,3 +27,17 @@ export type result = {
     child: ResultChildType[]
 
 }
+
+export interface Transactions{
+    
+    id: string
+    symbol: string
+    date: string
+    orderType: string
+    price: number
+    quantity: number
+    completed: Boolean
+    cancelled: Boolean
+    filled: number
+}
+
