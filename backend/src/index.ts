@@ -8,9 +8,14 @@ import getOrderBook, { matchFound } from "./stocks/popular/orderbooks"
 import tokenCheck from "./utils/tokenCheck"
 import { Server, Socket } from "socket.io"
 import http from "http"
+import cookieParser from "cookie-parser"
 
 const app = express()
-app.use(cors())
+app.use(cors({
+    origin: process.env.FRONTEND_URL,
+    credentials: true, 
+}))
+app.use(cookieParser());
 app.use(bodyParser.json())
 app.use('/api/stocks', stocksRouter)
 app.use('/api/user' , userRouter)
@@ -19,7 +24,7 @@ const server = http.createServer(app)
 
 export const io  = new Server(server,{
   cors: {
-    origin: "*", 
+    origin: process.env.FRONTEND_URL, 
     methods: ["GET", "POST"]
   }
 })
@@ -42,10 +47,11 @@ app.get('/api/get',(req : Request , res : Response)=>{
     })
 })
 app.get('/remove/token',async (req :Request , res : Response)=>{
-    const cookie = new  Cookies(req, res )
-    cookie.set("auth-token")
-    return res.redirect('user/signin',)
-})
+    console.log("token removed");
+    
+    res.clearCookie("auth_token");
+    return res.redirect('/signin',)   //fix needed here 
+ })
 app.post('/testing' ,tokenCheck, async (req:Request , res : Response)=>{
     const {price  , quantity , symbol , email } = req.body
     
@@ -61,7 +67,8 @@ app.post('/testing' ,tokenCheck, async (req:Request , res : Response)=>{
         message :"ok"
     })
 })
-app.get('/test23', (req : Request , res : Response)=>{
+app.get('/api/already/signed',tokenCheck, (req : Request , res : Response)=>{
+  
   
   return res.status(200).json({
     message :"ok"

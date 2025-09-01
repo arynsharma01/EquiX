@@ -4,26 +4,42 @@ import { NextFunction, Request, Response } from "express";
 import  Jwt, { JwtPayload }  from "jsonwebtoken";
 import userExists from "./userExists";
 config()
+
 async function tokenCheck(req: Request,res : Response ,next :NextFunction) {
-    const cookie = new Cookies(req,res);
-    const token = cookie.get("auth-token")
+    
+
+    
+    const token = req.cookies.auth_token
+    console.log(token);
+    
+    
     if(!token){
-        return res.redirect('/user/signin');
+        return res.status(403).json({
+            message : "unauthorized signup "
+        });
 
     }
     const validToken= Jwt.verify(token ,process.env.JWT_PASSWORD as string )  as JwtPayload
     
     if(!validToken){
-        cookie.set("auth-token")
-        return res.redirect('/user/signin');
+        res.clearCookie("auth_token")
+        return res.status(403).json({
+            message : "unauthorized signup "
+        });
     }
     
     console.log(validToken);
+
+    if (!req.body) req.body = {}; 
+
+
     req.body.email = validToken.email ;
     const validUser = await userExists(validToken.email )
     if(!validUser){
-        cookie.set("auth-token")
-        return res.redirect('/user/signin');
+        res.clearCookie("auth_token")
+        return res.status(403).json({
+            message : "unauthorized signup "
+        });
     }
     
     return next()

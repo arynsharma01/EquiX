@@ -71,7 +71,7 @@ stockSearch.get('/', async (req : Request , res : Response)=>{
     
 
     const searchResult = popularStocks.filter((stock)=>stock.name.includes(symbol) || stock.symbol.includes(symbol))
-    console.log(searchResult);
+    
     return res.status(200).json({
             message : "found ",
             searchResult : searchResult

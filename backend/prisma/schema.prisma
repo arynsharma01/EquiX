@@ -48,5 +48,6 @@ model Trades{
   user        User        @relation(fields: [userId] , references: [email])
   completed   Boolean     @default(false)
   cancelled   Boolean     @default(false)
+  filled      Int         @default(0)
 
 }

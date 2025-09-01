@@ -2,6 +2,7 @@ import bodyParser from "body-parser";
 import { config } from "dotenv";
 import express, { Request, Response } from "express"
 import axios from "axios";
+import { Redis } from '@upstash/redis'
 
 
 
@@ -35,6 +36,10 @@ popularRouter.get('/get-info', async (req: Request, res: Response) => {
 
     let allData: result[] = []
 
+    const redis = new Redis({
+   url: process.env.UPSTASH_REDIS_REST_URL,
+   token: process.env.UPSTASH_REDIS_REST_TOKEN,
+})
 
     const popularStocks = [
         
@@ -51,7 +56,15 @@ popularRouter.get('/get-info', async (req: Request, res: Response) => {
         { symbol: "NFLX", range: "1mo", interval: "1d" },
 
     ]
+    const cached = await redis.get("usersCache");
+    if (cached) {
+        ;
+         return res.status(200).json({
+            message: "Work well ",
+            allData: cached
 
+        })
+    }
     try {
 
         for (let i = 0; i < popularStocks.length; i++) {
@@ -95,6 +108,7 @@ popularRouter.get('/get-info', async (req: Request, res: Response) => {
                 });
             }
         }
+        await redis.setex("usersCache",1200, JSON.stringify(allData));
 
 
 

@@ -50,21 +50,25 @@ const body_parser_1 = __importDefault(require("body-parser"));
 const express_1 = __importDefault(require("express"));
 const stocks_1 = __importDefault(require("./stocks"));
 const user_1 = __importDefault(require("./user"));
-const cookies_1 = __importDefault(require("cookies"));
 const cors_1 = __importDefault(require("cors"));
 const orderbooks_1 = __importStar(require("./stocks/popular/orderbooks"));
 const tokenCheck_1 = __importDefault(require("./utils/tokenCheck"));
 const socket_io_1 = require("socket.io");
 const http_1 = __importDefault(require("http"));
+const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const app = (0, express_1.default)();
-app.use((0, cors_1.default)());
+app.use((0, cors_1.default)({
+    origin: process.env.FRONTEND_URL,
+    credentials: true,
+}));
+app.use((0, cookie_parser_1.default)());
 app.use(body_parser_1.default.json());
 app.use('/api/stocks', stocks_1.default);
 app.use('/api/user', user_1.default);
 const server = http_1.default.createServer(app);
 exports.io = new socket_io_1.Server(server, {
     cors: {
-        origin: "*",
+        origin: process.env.FRONTEND_URL,
         methods: ["GET", "POST"]
     }
 });
@@ -81,9 +85,9 @@ app.get('/api/get', (req, res) => {
     });
 });
 app.get('/remove/token', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const cookie = new cookies_1.default(req, res);
-    cookie.set("auth-token");
-    return res.redirect('user/signin');
+    console.log("token removed");
+    res.clearCookie("auth_token");
+    return res.redirect('/signin'); //fix needed here 
 }));
 app.post('/testing', tokenCheck_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { price, quantity, symbol, email } = req.body;
@@ -97,7 +101,7 @@ app.post('/testing', tokenCheck_1.default, (req, res) => __awaiter(void 0, void 
         message: "ok"
     });
 }));
-app.get('/test23', (req, res) => {
+app.get('/api/already/signed', tokenCheck_1.default, (req, res) => {
     return res.status(200).json({
         message: "ok"
     });

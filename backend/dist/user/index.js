@@ -20,9 +20,11 @@ const prismaClient_1 = __importDefault(require("../utils/prismaClient"));
 const cookies_1 = __importDefault(require("cookies"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const dotenv_1 = require("dotenv");
+const cookie_parser_1 = __importDefault(require("cookie-parser"));
 (0, dotenv_1.config)();
 const userRouter = (0, express_1.default)();
 userRouter.use(body_parser_1.default.json());
+userRouter.use((0, cookie_parser_1.default)());
 const signupValidation = zod_1.default.object({
     name: zod_1.default.string(),
     email: zod_1.default.email(),
@@ -65,7 +67,11 @@ userRouter.post('/signup', (req, res) => __awaiter(void 0, void 0, void 0, funct
             }
         });
         const token = jsonwebtoken_1.default.sign({ email: email }, process.env.JWT_PASSWORD, { expiresIn: "2d" });
-        cookie.set("auth-token", token);
+        res.cookie("auth_token", token, {
+            httpOnly: true,
+            secure: false, // localhost HTTP
+            sameSite: "lax"
+        });
         return res.status(201).json({
             message: "user created Successfully "
         });
@@ -81,7 +87,6 @@ userRouter.post('/signup', (req, res) => __awaiter(void 0, void 0, void 0, funct
 exports.default = userRouter;
 userRouter.post('/signin', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const cookie = new cookies_1.default(req, res);
         const { email, password } = req.body;
         if (!email || !password) {
             return res.status(401).json({
@@ -111,7 +116,11 @@ userRouter.post('/signin', (req, res) => __awaiter(void 0, void 0, void 0, funct
             });
         }
         const token = jsonwebtoken_1.default.sign({ email: email }, process.env.JWT_PASSWORD, { expiresIn: "2d" });
-        cookie.set("auth-token", token);
+        res.cookie("auth_token", token, {
+            httpOnly: true,
+            secure: false, // localhost HTTP
+            sameSite: "lax"
+        });
         return res.status(200).json({
             message: "signed in Successfully "
         });

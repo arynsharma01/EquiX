@@ -16,11 +16,16 @@ const body_parser_1 = __importDefault(require("body-parser"));
 const dotenv_1 = require("dotenv");
 const express_1 = __importDefault(require("express"));
 const axios_1 = __importDefault(require("axios"));
+const redis_1 = require("@upstash/redis");
 const popularRouter = (0, express_1.default)();
 (0, dotenv_1.config)();
 popularRouter.use(body_parser_1.default.json());
 popularRouter.get('/get-info', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let allData = [];
+    const redis = new redis_1.Redis({
+        url: process.env.UPSTASH_REDIS_REST_URL,
+        token: process.env.UPSTASH_REDIS_REST_TOKEN,
+    });
     const popularStocks = [
         { symbol: "AAPL", range: "1mo", interval: "1d" },
         { symbol: "MSFT", range: "1mo", interval: "1d" },
@@ -29,6 +34,14 @@ popularRouter.get('/get-info', (req, res) => __awaiter(void 0, void 0, void 0, f
         { symbol: "TSLA", range: "1mo", interval: "1d" },
         { symbol: "NFLX", range: "1mo", interval: "1d" },
     ];
+    const cached = yield redis.get("usersCache");
+    if (cached) {
+        ;
+        return res.status(200).json({
+            message: "Work well ",
+            allData: cached
+        });
+    }
     try {
         for (let i = 0; i < popularStocks.length; i++) {
             const { symbol, interval, range } = popularStocks[i];
@@ -63,6 +76,7 @@ popularRouter.get('/get-info', (req, res) => __awaiter(void 0, void 0, void 0, f
                 });
             }
         }
+        yield redis.setex("usersCache", 1200, JSON.stringify(allData));
         return res.status(200).json({
             message: "Work well ",
             allData: allData
