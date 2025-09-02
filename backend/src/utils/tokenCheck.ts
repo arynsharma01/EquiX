@@ -10,6 +10,8 @@ async function tokenCheck(req: Request,res : Response ,next :NextFunction) {
 
     
     const token = req.cookies.auth_token
+    console.log("token ", token);
+    
     
     
     
