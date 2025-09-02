@@ -13,7 +13,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
             <div className="flex flex-wrap lg:flex-nowrap justify-evenly  items-center py-2 w-full h-auto lg:h-16 bg-white fixed top-0 left-0 right-0 z-50 border-b border-gray-300 px-4">
 
-                <div className="bg-blue-600 rounded-2xl items-center justify-center flex gap-1 w-8 h-8 lg:w-12 lg:h-12 "> <div className="rounded-xl bg-white w-2 h-2  lg:h-4"></div> <div className="rounded-xl bg-white w-2 h-6 lg:h-6"></div> <div className="rounded-xl bg-white w-2 h-6 lg:h-8"> </div> </div>
+                <div className="bg-blue-600 rounded-2xl items-center justify-center flex gap-1 w-9 h-9 lg:w-12 lg:h-12 "> <div className="rounded-xl bg-white w-2 h-2  lg:h-4"></div> <div className="rounded-xl bg-white w-2 h-6 lg:h-6"></div> <div className="rounded-xl bg-white w-2 h-6 lg:h-8"> </div> </div>
 
 
                 <div className="flex flex-wrap justify-center lg:justify-between items-center gap-2 lg:gap-5 mt-2 lg:mt-0">

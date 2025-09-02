@@ -172,7 +172,7 @@ export default function StockBuy() {
                 <div className="flex flex-col px-2   justify-center items-center w-full min-h-screen">
             
             
-            <div className=" flex gap-2 lg:flex-row flex-col max-w-6xl w-full justify-between items-center  mx-auto">
+            <div className=" flex gap-2 lg:flex-row flex-col max-w-6xl w-full justify-between items-center  mx-auto py-4 px-2 ">
                 <div className=" flex flex-col gap-2  rounded-2xl bg-white shadow-sm shadow-black p-4 max-w-3xl w-full  ">
 
                     <div className="flex  justify-between items-center text-center gap-2  ">
