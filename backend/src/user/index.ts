@@ -34,7 +34,7 @@ const prisma = singlePrismaClient()
 
 userRouter.post('/signup', async (req: Request, res: Response) => {
     try {
-        
+
 
 
         const { name, email, mobile, password, age } = req.body
@@ -76,11 +76,12 @@ userRouter.post('/signup', async (req: Request, res: Response) => {
 
         res.cookie("auth_token", token, {
             httpOnly: true,
-            secure: false,  // localhost HTTP
-            sameSite: "lax",
-            maxAge : 1000 * 60 * 60 * 24 *2 ,
-            path : "/"
+            secure: process.env.NODE_ENV === "production",
+            sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+            maxAge: 1000 * 60 * 60 * 24 * 2,
+            path: "/"
         });
+
 
         return res.status(201).json({
             message: "user created Successfully "
@@ -140,9 +141,12 @@ userRouter.post('/signin', async (req, res) => {
 
         res.cookie("auth_token", token, {
             httpOnly: true,
-            secure: false,  // localhost HTTP
-            sameSite: "lax"
+            secure: process.env.NODE_ENV === "production", 
+            sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+            maxAge: 1000 * 60 * 60 * 24 * 2,
+            path: "/"
         });
+
 
         return res.status(200).json({
             message: "signed in Successfully "

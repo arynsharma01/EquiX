@@ -98,8 +98,9 @@ app.get('/api/already/signed', tokenCheck_1.default, (req, res) => {
         email: email
     });
 });
-server.listen(3000, () => {
-    console.log("listening at 3000");
+const PORT = process.env.PORT || 3000;
+server.listen(PORT, () => {
+    console.log(`🚀 Server running on port ${PORT}`);
 });
 app.post('/api/auth/logout', (req, res) => {
     res.clearCookie("auth_token");
