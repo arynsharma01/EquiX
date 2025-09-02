@@ -40,18 +40,8 @@ io.on("connection", (socket) => {
 });
 
 
-app.get('/api/get',(req : Request , res : Response)=>{
-    return res.status(200).json({
-        message : "works "
 
-    })
-})
-app.get('/remove/token',async (req :Request , res : Response)=>{
-    console.log("token removed");
-    
-    res.clearCookie("auth_token");
-    return res.redirect('/signin',)   //fix needed here 
- })
+
 app.post('/testing' ,tokenCheck, async (req:Request , res : Response)=>{
     const {price  , quantity , symbol , email } = req.body
     
@@ -69,12 +59,19 @@ app.post('/testing' ,tokenCheck, async (req:Request , res : Response)=>{
 })
 app.get('/api/already/signed',tokenCheck, (req : Request , res : Response)=>{
   
-  
+  const {email } = req.body;
   return res.status(200).json({
-    message :"ok"
+    message :"ok",
+    email : email
   })
 })
 server.listen(3000,()=>{
     console.log("listening at 3000");
     
+})
+app.post('/api/auth/logout', (req : Request , res : Response)=>{
+  res.clearCookie("auth_token")
+  return res.json({
+    message : "signed out "
+  })
 })

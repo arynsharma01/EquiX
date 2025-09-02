@@ -34,7 +34,7 @@ const prisma = singlePrismaClient()
 
 userRouter.post('/signup', async (req: Request, res: Response) => {
     try {
-        const cookie = new Cookies(req, res)
+        
 
 
         const { name, email, mobile, password, age } = req.body
@@ -77,7 +77,9 @@ userRouter.post('/signup', async (req: Request, res: Response) => {
         res.cookie("auth_token", token, {
             httpOnly: true,
             secure: false,  // localhost HTTP
-            sameSite: "lax"
+            sameSite: "lax",
+            maxAge : 1000 * 60 * 60 * 24 *2 ,
+            path : "/"
         });
 
         return res.status(201).json({

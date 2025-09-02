@@ -17,7 +17,6 @@ const express_1 = __importDefault(require("express"));
 const zod_1 = __importDefault(require("zod"));
 const userExists_1 = __importDefault(require("../utils/userExists"));
 const prismaClient_1 = __importDefault(require("../utils/prismaClient"));
-const cookies_1 = __importDefault(require("cookies"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const dotenv_1 = require("dotenv");
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
@@ -39,7 +38,6 @@ const signinValidation = zod_1.default.object({
 const prisma = (0, prismaClient_1.default)();
 userRouter.post('/signup', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const cookie = new cookies_1.default(req, res);
         const { name, email, mobile, password, age } = req.body;
         const validUserSchema = signupValidation.safeParse({
             name,
@@ -70,7 +68,9 @@ userRouter.post('/signup', (req, res) => __awaiter(void 0, void 0, void 0, funct
         res.cookie("auth_token", token, {
             httpOnly: true,
             secure: false, // localhost HTTP
-            sameSite: "lax"
+            sameSite: "lax",
+            maxAge: 1000 * 60 * 60 * 24 * 2,
+            path: "/"
         });
         return res.status(201).json({
             message: "user created Successfully "

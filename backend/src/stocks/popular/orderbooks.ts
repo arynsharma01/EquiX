@@ -31,8 +31,7 @@ interface User {
 }
 let sellAAPL: bidsAsks[] = []
 let buyAAPL: bidsAsks[] = []
-// { email: "admin@gmail.com", price: 802.63, quantity: 3 }, { email: "admin@gmail.com", price: 800.98, quantity: 5 }, { email: "admin@gmail.com", price: 789.43, quantity: 3 }
-// { email: "admin@gmail.com", price: 783.32, quantity: 2 }, { email: "M1", price: 80, quantity: 5 }, { email: "", price: 82, quantity: 3 }
+
 let sellMSFT: bidsAsks[] = []
 let buyMSFT: bidsAsks[] = []
 
@@ -41,8 +40,7 @@ let buyNVDA: bidsAsks[] = []
 
 let sellAMZN: bidsAsks[] = []
 let buyAMZN: bidsAsks[] = []
-//{ email: "admin@gmail.com", quantity: 4, price: 223 }
-// { email: "admin@gmail.com", quantity: 2, price: 221 }
+
 
 let sellTSLA: bidsAsks[] = []
 let buyTSLA: bidsAsks[] = []
@@ -102,7 +100,7 @@ export async function makeBid({ userEmail, price, quantity, orderType, symbol }:
     }
     if (orderType == "sell") {
         const sellArray = sellArrays[symbol]
-        console.log("inside the sell");
+        
 
         if (!sellArray) {
             return "no symbol  matched "
@@ -163,7 +161,7 @@ export async function makeBid({ userEmail, price, quantity, orderType, symbol }:
 
     }
     else {
-        console.log("inside the buy of makeBid ");
+       
 
 
         const buyArray = buyArrays[symbol]
@@ -802,6 +800,7 @@ export async function marketOrder(userEmail: string, quantity: number, orderType
             }) : ""
             result.message = "order completed "
             result.filled = quantity - remainingQuantity
+            getOrderBook()
             return result
 
 
@@ -963,6 +962,7 @@ export async function marketOrder(userEmail: string, quantity: number, orderType
             }) : ""
             result.message = "order completed "
             result.filled = quantity - remainingQuantity
+            getOrderBook()
             return result
 
 

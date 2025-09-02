@@ -79,16 +79,6 @@ exports.io.on("connection", (socket) => {
         console.log("❌ Client disconnected:", socket.id);
     });
 });
-app.get('/api/get', (req, res) => {
-    return res.status(200).json({
-        message: "works "
-    });
-});
-app.get('/remove/token', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log("token removed");
-    res.clearCookie("auth_token");
-    return res.redirect('/signin'); //fix needed here 
-}));
 app.post('/testing', tokenCheck_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { price, quantity, symbol, email } = req.body;
     if (!email) {
@@ -102,10 +92,18 @@ app.post('/testing', tokenCheck_1.default, (req, res) => __awaiter(void 0, void 
     });
 }));
 app.get('/api/already/signed', tokenCheck_1.default, (req, res) => {
+    const { email } = req.body;
     return res.status(200).json({
-        message: "ok"
+        message: "ok",
+        email: email
     });
 });
 server.listen(3000, () => {
     console.log("listening at 3000");
+});
+app.post('/api/auth/logout', (req, res) => {
+    res.clearCookie("auth_token");
+    return res.json({
+        message: "signed out "
+    });
 });

@@ -10,7 +10,7 @@ async function tokenCheck(req: Request,res : Response ,next :NextFunction) {
 
     
     const token = req.cookies.auth_token
-    console.log(token);
+    
     
     
     if(!token){
@@ -28,7 +28,7 @@ async function tokenCheck(req: Request,res : Response ,next :NextFunction) {
         });
     }
     
-    console.log(validToken);
+    
 
     if (!req.body) req.body = {}; 
 

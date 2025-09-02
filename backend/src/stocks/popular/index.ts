@@ -141,6 +141,8 @@ popularRouter.get('/search/result', async (req: Request, res: Response) => {
         let allData: result[] = []
 
         let symbol = req.query.symbol
+        
+        
         if (!symbol) {
             return res.status(200).json({
                 message: "Not found "
@@ -148,11 +150,11 @@ popularRouter.get('/search/result', async (req: Request, res: Response) => {
 
         }
         symbol = symbol.toString().toUpperCase()
-        const response = await axios.get(`https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?range=1mo&interval=1d`)
+        const response = await axios.get(`https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?range=1d&interval=30m`)
         const timestamps = response.data.chart.result[0].timestamp
         const values = response.data.chart.result[0].indicators.quote[0].low;
 
-        const dateTime = timestamps.map((value: number) => new Date(value * 1000).toISOString())
+        const dateTime = timestamps.map((value: number) => new Date(value * 1000).toLocaleTimeString())
         const closingValues = values.map((value: number) => parseFloat(value.toFixed(4)))
         const lastVolume = response.data.chart.result[0].indicators.quote[0].volume.slice(-1)[0];
 
@@ -180,7 +182,7 @@ popularRouter.get('/search/result', async (req: Request, res: Response) => {
         allData.push({ symbol: symbol, child: childEntry })
         return res.json({
             message: "ok",
-            allDatadata: allData
+            allData: allData
         })
     }
     catch (e) {

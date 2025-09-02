@@ -22,16 +22,12 @@ const prismaClient_1 = __importDefault(require("../../utils/prismaClient"));
 const __1 = require("../..");
 let sellAAPL = [];
 let buyAAPL = [];
-// { email: "admin@gmail.com", price: 802.63, quantity: 3 }, { email: "admin@gmail.com", price: 800.98, quantity: 5 }, { email: "admin@gmail.com", price: 789.43, quantity: 3 }
-// { email: "admin@gmail.com", price: 783.32, quantity: 2 }, { email: "M1", price: 80, quantity: 5 }, { email: "", price: 82, quantity: 3 }
 let sellMSFT = [];
 let buyMSFT = [];
 let sellNVDA = [];
 let buyNVDA = [];
 let sellAMZN = [];
 let buyAMZN = [];
-//{ email: "admin@gmail.com", quantity: 4, price: 223 }
-// { email: "admin@gmail.com", quantity: 2, price: 221 }
 let sellTSLA = [];
 let buyTSLA = [];
 let sellNFLX = [];
@@ -79,7 +75,6 @@ function makeBid(_a) {
         };
         if (orderType == "sell") {
             const sellArray = sellArrays[symbol];
-            console.log("inside the sell");
             if (!sellArray) {
                 return "no symbol  matched ";
             }
@@ -127,7 +122,6 @@ function makeBid(_a) {
             console.log(sellArrays[symbol], "selll");
         }
         else {
-            console.log("inside the buy of makeBid ");
             const buyArray = buyArrays[symbol];
             if (!buyArray) {
                 return "no symbol  matched ";
@@ -623,6 +617,7 @@ function marketOrder(userEmail, quantity, orderType, symbol) {
                 }) : "";
                 result.message = "order completed ";
                 result.filled = quantity - remainingQuantity;
+                getOrderBook();
                 return result;
             }
             else {
@@ -745,6 +740,7 @@ function marketOrder(userEmail, quantity, orderType, symbol) {
                 }) : "";
                 result.message = "order completed ";
                 result.filled = quantity - remainingQuantity;
+                getOrderBook();
                 return result;
             }
         }

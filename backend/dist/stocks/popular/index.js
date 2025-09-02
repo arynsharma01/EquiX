@@ -100,10 +100,10 @@ popularRouter.get('/search/result', (req, res) => __awaiter(void 0, void 0, void
             });
         }
         symbol = symbol.toString().toUpperCase();
-        const response = yield axios_1.default.get(`https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?range=1mo&interval=1d`);
+        const response = yield axios_1.default.get(`https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?range=1d&interval=30m`);
         const timestamps = response.data.chart.result[0].timestamp;
         const values = response.data.chart.result[0].indicators.quote[0].low;
-        const dateTime = timestamps.map((value) => new Date(value * 1000).toISOString());
+        const dateTime = timestamps.map((value) => new Date(value * 1000).toLocaleTimeString());
         const closingValues = values.map((value) => parseFloat(value.toFixed(4)));
         const lastVolume = response.data.chart.result[0].indicators.quote[0].volume.slice(-1)[0];
         const close = response.data.chart.result[0].indicators.quote[0].low.at(-1);
@@ -124,7 +124,7 @@ popularRouter.get('/search/result', (req, res) => __awaiter(void 0, void 0, void
         allData.push({ symbol: symbol, child: childEntry });
         return res.json({
             message: "ok",
-            allDatadata: allData
+            allData: allData
         });
     }
     catch (e) {

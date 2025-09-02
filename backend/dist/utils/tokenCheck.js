@@ -19,7 +19,6 @@ const userExists_1 = __importDefault(require("./userExists"));
 function tokenCheck(req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
         const token = req.cookies.auth_token;
-        console.log(token);
         if (!token) {
             return res.status(403).json({
                 message: "unauthorized signup "
@@ -32,7 +31,6 @@ function tokenCheck(req, res, next) {
                 message: "unauthorized signup "
             });
         }
-        console.log(validToken);
         if (!req.body)
             req.body = {};
         req.body.email = validToken.email;
