@@ -1,4 +1,4 @@
-import Cookies from "cookies";
+
 import { config } from "dotenv";
 import { NextFunction, Request, Response } from "express";
 import  Jwt, { JwtPayload }  from "jsonwebtoken";
@@ -9,7 +9,7 @@ async function tokenCheck(req: Request,res : Response ,next :NextFunction) {
     
 
     
-    const token = req.cookies.auth_token
+    const token = req.headers.token as string
     console.log("token ", token);
     
     
@@ -24,7 +24,7 @@ async function tokenCheck(req: Request,res : Response ,next :NextFunction) {
     const validToken= Jwt.verify(token ,process.env.JWT_PASSWORD as string )  as JwtPayload
     
     if(!validToken){
-        res.clearCookie("auth_token")
+        
         return res.status(403).json({
             message : "unauthorized signup "
         });

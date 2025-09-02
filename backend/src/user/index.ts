@@ -6,12 +6,12 @@ import singlePrismaClient from "../utils/prismaClient";
 import cors from "cors"
 import Jwt from "jsonwebtoken";
 import { config } from "dotenv";
-import cookieParser from "cookie-parser";
+
 config()
 const userRouter = express()
 
 userRouter.use(bodyParser.json())
-userRouter.use(cookieParser())
+
 userRouter.use(cors({
     origin: ["https://equi-x-ijts.vercel.app"],
     credentials: true,
@@ -79,17 +79,18 @@ userRouter.post('/signup', async (req: Request, res: Response) => {
 
         const token = Jwt.sign({ email: email }, process.env.JWT_PASSWORD as string, { expiresIn: "2d" })
 
-        res.cookie("auth_token", token, {
-            httpOnly: true,
-            secure: true,
-            sameSite:  "none" ,
-            maxAge: 1000 * 60 * 60 * 24 * 2,
-            path: "/"
-        });
+        // res.cookie("auth_token", token, {
+        //     httpOnly: true,
+        //     secure: true,
+        //     sameSite:  "none" ,
+        //     maxAge: 1000 * 60 * 60 * 24 * 2,
+        //     path: "/"
+        // });
 
 
         return res.status(201).json({
-            message: "user created Successfully "
+            message: "user created Successfully ",
+            token : token
         })
 
 
@@ -144,17 +145,18 @@ userRouter.post('/signin', async (req, res) => {
 
         const token = Jwt.sign({ email: email }, process.env.JWT_PASSWORD as string, { expiresIn: "2d" })
 
-        res.cookie("auth_token", token, {
-            httpOnly: true,
-            secure: true, 
-            sameSite: "none",
-            maxAge: 1000 * 60 * 60 * 24 * 2,
-            path: "/"
-        });
+        // res.cookie("auth_token", token, {
+        //     httpOnly: true,
+        //     secure: true, 
+        //     sameSite: "none",
+        //     maxAge: 1000 * 60 * 60 * 24 * 2,
+        //     path: "/"
+        // });
 
 
         return res.status(200).json({
-            message: "signed in Successfully "
+            message: "signed in Successfully ",
+            token : token
         })
     }
     catch (e) {
