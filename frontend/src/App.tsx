@@ -5,7 +5,7 @@ import Layout from './layout'
 import Market from './components/Market'
 import StockDataCard from './components/StockDataCard'
 
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import Signup from './components/Signup'
 import Signin from './components/Signin'
 import TestSocket from './components/TestSocket'
@@ -27,6 +27,7 @@ function App() {
         <Layout>
         <Routes>
           {/* <Route path="/" element={<Layout />}> */}
+          <Route path="/" element={<Navigate to="/dashboard" replace />} />
           <Route  path = "/dashboard" element={<Market />} />
           <Route  path = "/stock/info" element={<StockDataCard />} />
           <Route  path = "/signup" element={<Signup />} />
