@@ -58,28 +58,28 @@ export default function Transactions() {
 
                 </div>
                 <div className="flex rounded-xl border border-gray-300 p-2  w-full gap-4 bg-white  ">
-                    <div className={`p-2 px-4 ${viewTransaction === "All" ? "bg-[#2563EB] text-white " : "text-gray-700 hover:bg-gray-200 "} transition-all duration-300 hover:cursor-pointer text-center rounded-xl `}
+                    <div className={`p-2 px-4 ${viewTransaction === "All" ? "bg-[#2563EB] text-white " : "text-gray-700 hover:bg-gray-200 "}   font-thin lg:text-lg text-md  transition-all duration-300 hover:cursor-pointer text-center rounded-xl `}
                         onClick={() => {
                             setViewTransaction("All")
                         }}
                     >
                         All ({transactions.length})
                     </div>
-                    <div className={`p-2 ${viewTransaction === "Executed" ? "bg-[#2563EB] text-white " : "text-gray-700 hover:bg-gray-200 "} transition-all duration-300 hover:cursor-pointer text-center rounded-xl `}
+                    <div className={`p-2 ${viewTransaction === "Executed" ? "bg-[#2563EB] text-white " : "text-gray-700 hover:bg-gray-200 "}   font-thin lg:text-lg text-md transition-all duration-300 hover:cursor-pointer text-center rounded-xl `}
                         onClick={() => {
                             setViewTransaction("Executed")
                         }}
                     >
                         Executed ({executedTransactions.length})
                     </div>
-                    <div className={`p-2 ${viewTransaction === "Pending" ? "bg-[#2563EB] text-white " : "text-gray-700 hover:bg-gray-200 "} transition-all duration-300 hover:cursor-pointer text-center rounded-xl `}
+                    <div className={`p-2 ${viewTransaction === "Pending" ? "bg-[#2563EB] text-white " : "text-gray-700 hover:bg-gray-200 "}   font-thin lg:text-lg text-md transition-all duration-300 hover:cursor-pointer text-center rounded-xl `}
                         onClick={() => {
                             setViewTransaction("Pending")
                         }}
                     >
                         Pending ({pendingTransactions.length})
                     </div>
-                    <div className={`p-2 ${viewTransaction === "Cancelled" ? "bg-[#2563EB] text-white " : "text-gray-700 hover:bg-gray-200 "} transition-all duration-300 hover:cursor-pointer text-center rounded-xl  `}
+                    <div className={`p-2 ${viewTransaction === "Cancelled" ? "bg-[#2563EB] text-white " : "text-gray-700 hover:bg-gray-200 "}  font-thin lg:text-lg text-md  transition-all duration-300 hover:cursor-pointer text-center rounded-xl  `}
                         onClick={() => {
                             setViewTransaction("Cancelled")
                         }}

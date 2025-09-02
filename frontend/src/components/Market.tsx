@@ -74,7 +74,7 @@ export default function Market() {
         <div className="flex items-center justify-center w-full min-h-screen">
             <Spinner variant="ring" className="size-16" />
         </div>
-    ) : (<div className=" flex items-center justify-center max-w-7xl mx-auto w-full">
+    ) : (<div className=" flex p-2 items-center justify-center max-w-7xl mx-auto w-full">
         <div className="flex flex-col gap-10 ">
 
             <div className="flex flex-col pt-6 gap-2 ">
