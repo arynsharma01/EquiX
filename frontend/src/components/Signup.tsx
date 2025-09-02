@@ -34,7 +34,7 @@ export default function Signup() {
             
         }
         signedIn()
-    })
+    },[])
 
     async function userSignup() {
         setLoader(true)

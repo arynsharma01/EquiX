@@ -21,19 +21,23 @@ export default function Signin() {
     useEffect(()=>{
         async function signedIn() {
             try{
-                await axios.get('https://equix-k46e.onrender.com/api/already/signed',{
+                 await axios.get('https://equix-k46e.onrender.com/api/already/signed',{
                     withCredentials : true
                 })
                 navigate(from,{replace : true})
+                
+                
             }
             catch(e){
+                console.log(e);
+                
                 console.log("not signed in ");
                 
             }
             
         }
         signedIn()
-    })
+    },[])
     async function userSignin() {
         setLoader(true)
         const payload = {
