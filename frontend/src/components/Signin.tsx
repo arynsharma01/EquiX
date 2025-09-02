@@ -21,7 +21,7 @@ export default function Signin() {
     useEffect(()=>{
         async function signedIn() {
             try{
-                  await axios.post('https://equix-k46e.onrender.com/api/already/signed',{
+                  await axios.post('https://equix-k46e.onrender.com/api/already/signed',{},{
                     headers: {
                         token :localStorage.getItem("token")
                     }

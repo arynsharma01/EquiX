@@ -17,7 +17,7 @@ export default function DropM() {
   useEffect(() => {
     // 👇 Check if cookie/session is valid
     axios
-      .post("https://equix-k46e.onrender.com/api/already/signed", { withCredentials: true },{headers : {token : localStorage.getItem("token")}})
+      .post("https://equix-k46e.onrender.com/api/already/signed",{headers : {token : localStorage.getItem("token")}})
       .then((res) => {
         
         
@@ -29,7 +29,9 @@ export default function DropM() {
   }, [])
 
   const handleLogout = async () => {
-    await axios.post("https://equix-k46e.onrender.com/api/auth/logout", {}, { withCredentials: true })
+    await axios.post("https://equix-k46e.onrender.com/api/auth/logout", {}, { withCredentials: true,
+      headers : {token : localStorage.getItem("token")}
+     })
     setEmail(null)
     navigate("/signin") 
   }
