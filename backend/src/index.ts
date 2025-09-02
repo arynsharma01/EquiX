@@ -12,9 +12,10 @@ import cookieParser from "cookie-parser"
 
 const app = express()
 app.use(cors({
-    origin: process.env.FRONTEND_URL,
+    origin: ["https://equi-x-ijts.vercel.app"],
     credentials: true, 
 }))
+
 app.use(cookieParser());
 app.use(bodyParser.json())
 app.use('/api/stocks', stocksRouter)
@@ -24,8 +25,9 @@ const server = http.createServer(app)
 
 export const io  = new Server(server,{
   cors: {
-    origin: process.env.FRONTEND_URL, 
-    methods: ["GET", "POST"]
+    origin: "https://equi-x-ijts.vercel.app", 
+    methods: ["GET", "POST"],
+    credentials: true,
   }
 })
 
