@@ -81,8 +81,8 @@ userRouter.post('/signup', async (req: Request, res: Response) => {
 
         res.cookie("auth_token", token, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+            secure: true,
+            sameSite:  "none" ,
             maxAge: 1000 * 60 * 60 * 24 * 2,
             path: "/"
         });
@@ -146,8 +146,8 @@ userRouter.post('/signin', async (req, res) => {
 
         res.cookie("auth_token", token, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === "production", 
-            sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+            secure: true, 
+            sameSite: "none",
             maxAge: 1000 * 60 * 60 * 24 * 2,
             path: "/"
         });
