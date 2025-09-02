@@ -10,6 +10,8 @@ async function tokenCheck(req: Request,res : Response ,next :NextFunction) {
 
     
     const token = req.headers.token as string
+    console.log(req.headers + " header ");
+    
     console.log("token ", token);
     
     
