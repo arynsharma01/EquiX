@@ -3,7 +3,7 @@ import express, { Request, Response } from "express";
 import z from "zod";
 import userExists from "../utils/userExists";
 import singlePrismaClient from "../utils/prismaClient";
-import Cookies from "cookies";
+import cors from "cors"
 import Jwt from "jsonwebtoken";
 import { config } from "dotenv";
 import cookieParser from "cookie-parser";
@@ -166,7 +166,3 @@ userRouter.post('/signin', async (req, res) => {
 
 
 })
-
-function cors(arg0: { origin: string[]; credentials: boolean; }): any {
-    throw new Error("Function not implemented.");
-}
