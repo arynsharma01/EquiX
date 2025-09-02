@@ -12,6 +12,11 @@ const userRouter = express()
 
 userRouter.use(bodyParser.json())
 userRouter.use(cookieParser())
+userRouter.use(cors({
+    origin: ["https://equi-x-ijts.vercel.app"],
+    credentials: true,
+}));
+ 
 
 
 const signupValidation = z.object({
@@ -161,3 +166,7 @@ userRouter.post('/signin', async (req, res) => {
 
 
 })
+
+function cors(arg0: { origin: string[]; credentials: boolean; }): any {
+    throw new Error("Function not implemented.");
+}
