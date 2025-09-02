@@ -60,7 +60,7 @@ app.post('/testing' ,tokenCheck, async (req:Request , res : Response)=>{
         message :"ok"
     })
 })
-app.get('/api/already/signed',tokenCheck, (req : Request , res : Response)=>{
+app.post('/api/already/signed',tokenCheck, (req : Request , res : Response)=>{
   
   const {email } = req.body;
   return res.status(200).json({
