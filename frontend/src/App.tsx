@@ -1,4 +1,4 @@
-import { useState } from 'react'
+
 
 import './App.css'
 import Layout from './layout'
@@ -12,6 +12,7 @@ import TestSocket from './components/TestSocket'
 import StockBuy from './components/StockBuy'
 import Transactions from './components/Transactions'
 import Portfolio from './components/Portfolio'
+import StockSearchedCard from './components/StockSearchedCard'
 
 
 
@@ -34,6 +35,7 @@ function App() {
           <Route  path = "/exchange" element={<StockBuy />} />
           <Route  path = "/transactions" element={<Transactions />} />
           <Route  path = "/portfolio" element={<Portfolio />} />
+          <Route  path = "/stock/searched" element={<StockSearchedCard />} />
 
         {/* </Route> */}
         </Routes>

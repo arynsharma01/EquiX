@@ -13,11 +13,15 @@ export default function Signin() {
     const navigate = useNavigate()
     const [loader, setLoader] = useState<boolean>(false)
     const [response , setResponse] = useState<string>("")
+    
+    
     const from = location.state?.from?.pathname  ||'/dashboard'
+   
+    
     useEffect(()=>{
         async function signedIn() {
             try{
-                await axios.get('http://localhost:3000/api/already/signed',{
+                await axios.get('https://equix-k46e.onrender.com/api/already/signed',{
                     withCredentials : true
                 })
                 navigate(from,{replace : true})
@@ -39,7 +43,7 @@ export default function Signin() {
 
         }
         try{
-            const res = await axios.post('http://localhost:3000/api/user/signin', payload, {
+            const res = await axios.post('https://equix-k46e.onrender.com/api/user/signin', payload, {
                 withCredentials : true 
             })
             console.log(res.data);

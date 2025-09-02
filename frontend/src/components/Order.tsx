@@ -14,7 +14,7 @@ export default function Order({ id, symbol, date, orderType, price, quantity, co
         try{
 
         
-        const res = await axios.post('http://localhost:3000/api/stocks/buy/cancel/trade',{
+        const res = await axios.post('https://equix-k46e.onrender.com/api/stocks/buy/cancel/trade',{
             tradeID : id 
         },{
             withCredentials : true

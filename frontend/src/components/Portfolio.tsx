@@ -10,10 +10,16 @@ export default function Portfolio() {
     const [balance , setBalance ] = useState<number>(0)
     const [loader , setLoader]  = useState<boolean>(true)
     const navigate = useNavigate()
+    const total = stocks.reduce(
+  (acc, stock) => acc + stock.averagePrice * stock.quantity,
+  0
+);
+
     useEffect(()=>{
-        try{
+        
             async function getStocks(){
-                const res = await axios.get('http://localhost:3000/api/stocks/buy/get/stocks',{
+                try{
+                const res = await axios.get('https://equix-k46e.onrender.com/api/stocks/buy/get/stocks',{
                 withCredentials : true
 
             })
@@ -21,13 +27,14 @@ export default function Portfolio() {
             setStocks(res.data.stocks)
             setBalance(res.data.balance)
             setLoader(false)
-            }
-            getStocks()
+            }catch(e){
+            navigate('/signin')}
         }
-        catch(e){
-            navigate('/signin')
-        }
-    })
+            
+        
+        
+        getStocks()
+    },[])
     return (loader?<div className="flex justify-center items-center w-full min-h-screen ">
         <Spinner variant="ring" className="size-12"/>
     </div> : 
@@ -48,7 +55,8 @@ export default function Portfolio() {
                     Total Value 
                 </div>
                 <div className="text-2xl font-bold">
-                    $ 29833
+                    
+                    $ {total.toLocaleString()}
                 </div>
 
             </div>

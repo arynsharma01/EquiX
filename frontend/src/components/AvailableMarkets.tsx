@@ -1,25 +1,20 @@
-import type React from "react"
-import { useEffect } from "react";
+
 
 interface Props {
     symbol: string,
     stockName: string,
 
-    buy: any,
-    sell: any
-    setBuy: (value: any) => void;
-    setSell: (value: any) => void;
+    
+    
+    
     setChange: (value: boolean) => void;
     setStockName : (value : string)=> void
     setStockSymbol : (value : string)=> void
 
 }
 
-export default function AvailableMarkets({ symbol, stockName, setSell, setBuy, buy, sell, setChange , setStockName , setStockSymbol }: Props) {
-    useEffect(() => {
-        console.log(buy, "inside available ");
-
-    })
+export default function AvailableMarkets({ symbol, stockName,  setChange , setStockName , setStockSymbol }: Props) {
+    
     return <div className="flex justify-between items-center hover:cursor-pointer hover:bg-gray-300 transition-all duration-200 rounded-2xl  p-4 w-full "
         onClick={() => {
             // setBuy()

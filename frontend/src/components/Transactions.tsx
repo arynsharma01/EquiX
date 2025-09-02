@@ -17,11 +17,11 @@ export default function Transactions() {
     useEffect(() => {
         async function getTransactions() {
             try {
-                const res = await axios.get('http://localhost:3000/api/stocks/buy/get/stocks', {
+                const res = await axios.get('https://equix-k46e.onrender.com/api/stocks/buy/get/stocks', {
                     withCredentials: true
                     
                 })
-                console.log(res);
+                ;
                 setTransactions(res.data.trades)
                 setExecutedTransactions(res.data.trades.filter((trade :Transactions)=>{return trade.completed === true }))
                 setPendingTransactions(res.data.trades.filter((trade :Transactions)=>{return !trade.completed && !trade.cancelled }))

@@ -22,7 +22,7 @@ export default function Signup() {
     useEffect(()=>{
         async function signedIn() {
             try{
-                await axios.get('http://localhost:3000/api/already/signed',{
+                await axios.get('https://equix-k46e.onrender.com/api/already/signed',{
                     withCredentials : true
                 })
                 navigate(from,{replace : true})
@@ -46,7 +46,7 @@ export default function Signup() {
 
         }
         try{
-            const res = await axios.post('http://localhost:3000/api/user/signup', payload , {
+            const res = await axios.post('https://equix-k46e.onrender.com/api/user/signup', payload , {
                 withCredentials : true 
             })
             console.log(res.data);

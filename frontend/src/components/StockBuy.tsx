@@ -1,7 +1,7 @@
-import { useAtom, useAtomValue } from "jotai";
+import { useAtom } from "jotai";
 import { useEffect, useState } from "react"
 import io from "socket.io-client"
-import { buyAAPL, buyAMZN, buyMSFT, buyNFLX, buyNVDA, buyTSLA, sellAAPL, sellAMZN, sellMSFT, sellNFLX, sellNVDA, sellTSLA, type StockBuyer } from "../store/popularStocks";
+import { buyAAPL, buyAMZN, buyMSFT, buyNFLX, buyNVDA, buyTSLA, sellAAPL, sellAMZN, sellMSFT, sellNFLX, sellNVDA, sellTSLA } from "../store/popularStocks";
 import { toast } from "sonner"
 import AvailableMarkets from "./AvailableMarkets";
 import Price from "./Price";
@@ -36,8 +36,10 @@ export default function StockBuy() {
     const [buyNFLXstock, setBuyNFLX] = useAtom(buyNFLX);
     const [sellNFLXstock, setSellNFLX] = useAtom(sellNFLX);
 
-    const [buy, setBuy] = useState<StockBuyer[]>();
-    const [sell, setSell] = useState<StockBuyer[]>();
+    // const [buy, setBuy] = useState<StockBuyer[]>();
+    // const [sell, setSell] = useState<StockBuyer[]>();
+    
+    
 
     const [change, setChange] = useState<boolean>(false)
     const [loader, setLoader] = useState<boolean>(true)
@@ -81,7 +83,7 @@ export default function StockBuy() {
 
 
 
-        const socket = io("http://localhost:3000");
+        const socket = io("https://equix-k46e.onrender.com");
 
         socket.on("connect", () => {
 
@@ -111,7 +113,7 @@ export default function StockBuy() {
             })
         });
         async function fnc() {
-            await axios.get('http://localhost:3000/test23')
+            await axios.get('https://equix-k46e.onrender.com/test23')
 
 
 
@@ -139,15 +141,14 @@ export default function StockBuy() {
             orderType: side
         }
         let url ;
-        placeOrderType === "limit" ? url = "http://localhost:3000/api/stocks/buy/new/stock" : url = "http://localhost:3000/api/stocks/buy/new/stock/market"
-        console.log(url);
-        console.log(side);
+        placeOrderType === "limit" ? url = "https://equix-k46e.onrender.com/api/stocks/buy/new/stock" : url = "https://equix-k46e.onrender.com/api/stocks/buy/new/stock/market"
+        
         
         
         const res = await axios.post(url, payload, {
             withCredentials: true
         })
-        console.log(res);
+        
         setButtonLoader(false)
         toast(res.data.message,
             {description : res.data.filled || ""
@@ -368,12 +369,12 @@ export default function StockBuy() {
                         Available Markets
                     </div>
 
-                    <AvailableMarkets symbol="AMZN" stockName="Amazon Inc" sell={sellAMZNstock} buy={buyAMZNstock} setBuy={setBuy} setSell={setSell} setChange={setChange} setStockName={setStockName} setStockSymbol={setStockSymbol} />
-                    <AvailableMarkets symbol="AAPL" stockName="Apple " sell={sellAAPLstock} buy={buyAAPLstock} setBuy={setBuy} setSell={setSell} setChange={setChange} setStockName={setStockName} setStockSymbol={setStockSymbol} />
-                    <AvailableMarkets symbol="NVDA" stockName="Nvidia" sell={sellNVDAstock} buy={buyNVDAstock} setBuy={setBuy} setSell={setSell} setChange={setChange} setStockName={setStockName} setStockSymbol={setStockSymbol} />
-                    <AvailableMarkets symbol="NFLX" stockName="Netflix Inc" sell={sellNFLXstock} buy={buyNFLXstock} setBuy={setBuy} setSell={setSell} setChange={setChange} setStockName={setStockName} setStockSymbol={setStockSymbol} />
-                    <AvailableMarkets symbol="TSLA" stockName="Tesla " sell={sellTSLAstock} buy={buyTSLAstock} setBuy={setBuy} setSell={setSell} setChange={setChange} setStockName={setStockName} setStockSymbol={setStockSymbol} />
-                    <AvailableMarkets symbol="MSFT" stockName="Microsoft   " sell={sellMSFTstock} buy={buyMSFTstock} setBuy={setBuy} setSell={setSell} setChange={setChange} setStockName={setStockName} setStockSymbol={setStockSymbol} />
+                    <AvailableMarkets symbol="AMZN" stockName="Amazon Inc"  setChange={setChange} setStockName={setStockName} setStockSymbol={setStockSymbol} />
+                    <AvailableMarkets symbol="AAPL" stockName="Apple "     setChange={setChange} setStockName={setStockName} setStockSymbol={setStockSymbol} />
+                    <AvailableMarkets symbol="NVDA" stockName="Nvidia"     setChange={setChange} setStockName={setStockName} setStockSymbol={setStockSymbol} />
+                    <AvailableMarkets symbol="NFLX" stockName="Netflix Inc"   setChange={setChange} setStockName={setStockName} setStockSymbol={setStockSymbol} />
+                    <AvailableMarkets symbol="TSLA" stockName="Tesla "   setChange={setChange} setStockName={setStockName} setStockSymbol={setStockSymbol} />
+                    <AvailableMarkets symbol="MSFT" stockName="Microsoft   "   setChange={setChange} setStockName={setStockName} setStockSymbol={setStockSymbol} />
 
 
 
