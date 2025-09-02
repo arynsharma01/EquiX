@@ -1,0 +1,11 @@
+<svg width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Logo">
+  <!-- Blue rounded square (Tailwind blue-600) -->
+  <rect x="0" y="0" width="48" height="48" rx="16" fill="#2563EB"/>
+  <!-- Bars: width 8px, gap 4px, bottom-aligned -->
+  <!-- left bar: h-4 (16px) -->
+  <rect x="8"  y="24" width="8" height="16" fill="#FFFFFF"/>
+  <!-- middle bar: h-6 (24px) -->
+  <rect x="20" y="16" width="8" height="24" fill="#FFFFFF"/>
+  <!-- right bar: h-8 (32px) -->
+  <rect x="32" y="8"  width="8" height="32" fill="#FFFFFF"/>
+</svg>
