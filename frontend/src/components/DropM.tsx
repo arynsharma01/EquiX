@@ -17,7 +17,7 @@ export default function DropM() {
   useEffect(() => {
     // 👇 Check if cookie/session is valid
     axios
-      .get("https://equix-k46e.onrender.com/api/already/signed", { withCredentials: true })
+      .post("https://equix-k46e.onrender.com/api/already/signed", { withCredentials: true },{headers : {token : localStorage.getItem("token")}})
       .then((res) => {
         
         

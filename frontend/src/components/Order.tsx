@@ -17,7 +17,8 @@ export default function Order({ id, symbol, date, orderType, price, quantity, co
         const res = await axios.post('https://equix-k46e.onrender.com/api/stocks/buy/cancel/trade',{
             tradeID : id 
         },{
-            withCredentials : true
+            withCredentials : true,
+            headers : {token : localStorage.getItem("token")}
         })
         setCancelButtonLoader(false)
 

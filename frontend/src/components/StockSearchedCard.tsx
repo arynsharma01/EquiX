@@ -17,7 +17,6 @@ export default function StockSearchedCard() {
         try{
             async function getStock() {
             const res = await axios.get(`https://equix-k46e.onrender.com/api/stocks/popular/search/result?symbol=${symbol}`)
-            console.log(res.data);
             
             setCurrentStock(res.data.allData)
             setLoader(false)

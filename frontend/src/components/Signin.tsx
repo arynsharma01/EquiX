@@ -21,9 +21,14 @@ export default function Signin() {
     useEffect(()=>{
         async function signedIn() {
             try{
-                 await axios.post('https://equix-k46e.onrender.com/api/already/signed',{
-                    withCredentials : true
-                })
+                  await axios.post('https://equix-k46e.onrender.com/api/already/signed',{
+                    headers: {
+                        token :localStorage.getItem("token")
+                    }
+                    
+                },
+            )
+            
                 navigate(from,{replace : true})
                 
                 
@@ -48,11 +53,14 @@ export default function Signin() {
         }
         try{
             const res = await axios.post('https://equix-k46e.onrender.com/api/user/signin', payload, {
-                withCredentials : true 
+                headers : {
+                    token : localStorage.getItem("token") 
+                }
             })
-            console.log(res.data);
+            
             
             setResponse(res.data.message)
+            localStorage.setItem("token",res.data.token)
             setLoader(false)
             navigate(from ,{replace : true})
             

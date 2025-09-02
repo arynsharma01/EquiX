@@ -17,10 +17,7 @@ export default function Transactions() {
     useEffect(() => {
         async function getTransactions() {
             try {
-                const res = await axios.get('https://equix-k46e.onrender.com/api/stocks/buy/get/stocks', {
-                    withCredentials: true
-                    
-                })
+                const res = await axios.get('https://equix-k46e.onrender.com/api/stocks/buy/get/stocks', {headers : {token : localStorage.getItem("token")}})
                 ;
                 setTransactions(res.data.trades)
                 setExecutedTransactions(res.data.trades.filter((trade :Transactions)=>{return trade.completed === true }))

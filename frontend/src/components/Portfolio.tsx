@@ -19,10 +19,7 @@ export default function Portfolio() {
         
             async function getStocks(){
                 try{
-                const res = await axios.get('https://equix-k46e.onrender.com/api/stocks/buy/get/stocks',{
-                withCredentials : true
-
-            })
+                const res = await axios.get('https://equix-k46e.onrender.com/api/stocks/buy/get/stocks',{headers : {token : localStorage.getItem("token")}})
 
             setStocks(res.data.stocks)
             setBalance(res.data.balance)

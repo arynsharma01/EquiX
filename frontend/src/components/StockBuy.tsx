@@ -145,9 +145,7 @@ export default function StockBuy() {
         
         
         
-        const res = await axios.post(url, payload, {
-            withCredentials: true
-        })
+        const res = await axios.post(url, payload, {headers : {token : localStorage.getItem("token")}})
         
         setButtonLoader(false)
         toast(res.data.message,
