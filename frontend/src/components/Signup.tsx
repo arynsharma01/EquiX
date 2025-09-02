@@ -22,7 +22,7 @@ export default function Signup() {
     useEffect(()=>{
         async function signedIn() {
             try{
-                await axios.get('https://equix-k46e.onrender.com/api/already/signed',{
+                await axios.post('https://equix-k46e.onrender.com/api/already/signed',{
                     withCredentials : true
                 })
                 navigate(from,{replace : true})
