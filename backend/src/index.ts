@@ -14,6 +14,7 @@ const app = express()
 app.use(cors({
     origin: ["https://equi-x-ijts.vercel.app"],
     credentials: true, 
+    allowedHeaders: ["Content-Type", "Authorization", 'Cookie']
 }))
 
 app.use(cookieParser());
