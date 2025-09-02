@@ -12,7 +12,7 @@ import cookieParser from "cookie-parser"
 
 const app = express()
 app.use(cors({
-    origin: ["https://equi-x-ijts.vercel.app"],
+    origin: ["https://equi-x-uhid.vercel.app"],
     credentials: true, 
     allowedHeaders: ["Content-Type", "Authorization", 'Cookie']
 }))
@@ -26,7 +26,7 @@ const server = http.createServer(app)
 
 export const io  = new Server(server,{
   cors: {
-    origin: "https://equi-x-ijts.vercel.app", 
+    origin: "https://equi-x-uhid.vercel.app", 
     methods: ["GET", "POST"],
     credentials: true,
   }
