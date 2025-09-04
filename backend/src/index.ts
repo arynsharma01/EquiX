@@ -68,6 +68,14 @@ app.post('/api/already/signed',tokenCheck, (req : Request , res : Response)=>{
     email : email
   })
 })
+app.get('/health', (req : Request , res : Response)=>{
+  
+ 
+  return res.status(200).json({
+    message :"ok",
+    
+  })
+})
 const PORT = process.env.PORT || 3000;
 
 server.listen(PORT, () => {
