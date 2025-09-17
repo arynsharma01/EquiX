@@ -51,9 +51,9 @@ popularRouter.get('/get-info', async (req: Request, res: Response) => {
 
         { symbol: "AMZN", range: "1wk", interval: "1d" },
 
-        { symbol: "TSLA", range: "1wk", interval: "1d" },
+        // { symbol: "TSLA", range: "1wk", interval: "1d" },
 
-        { symbol: "NFLX", range: "1wk", interval: "1d" },
+        // { symbol: "NFLX", range: "1wk", interval: "1d" },
 
     ]
     const cached = await redis.get("usersCache");
