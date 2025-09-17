@@ -43,17 +43,17 @@ popularRouter.get('/get-info', async (req: Request, res: Response) => {
 
     const popularStocks = [
         
-        { symbol: "AAPL", range: "1mo", interval: "1d" },
+        { symbol: "AAPL", range: "1wk", interval: "1d" },
 
-        { symbol: "MSFT", range: "1mo", interval: "1d" },
+        { symbol: "MSFT", range: "1wk", interval: "1d" },
 
-        { symbol: "NVDA", range: "1mo", interval: "1d" },
+        { symbol: "NVDA", range: "1wk", interval: "1d" },
 
-        { symbol: "AMZN", range: "1mo", interval: "1d" },
+        { symbol: "AMZN", range: "1wk", interval: "1d" },
 
-        { symbol: "TSLA", range: "1mo", interval: "1d" },
+        { symbol: "TSLA", range: "1wk", interval: "1d" },
 
-        { symbol: "NFLX", range: "1mo", interval: "1d" },
+        { symbol: "NFLX", range: "1wk", interval: "1d" },
 
     ]
     const cached = await redis.get("usersCache");
