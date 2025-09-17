@@ -51,9 +51,9 @@ popularRouter.get('/get-info', async (req: Request, res: Response) => {
 
         { symbol: "AMZN", range: "1wk", interval: "1d" },
 
-        // { symbol: "TSLA", range: "1wk", interval: "1d" },
+        { symbol: "TSLA", range: "1wk", interval: "1d" },
 
-        // { symbol: "NFLX", range: "1wk", interval: "1d" },
+        { symbol: "NFLX", range: "1wk", interval: "1d" },
 
     ]
     const cached = await redis.get("usersCache");
@@ -70,6 +70,7 @@ popularRouter.get('/get-info', async (req: Request, res: Response) => {
         for (let i = 0; i < popularStocks.length; i++) {
             const { symbol, interval, range } = popularStocks[i]
             const response = await axios.get(`https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?range=${range}&interval=${interval}`)
+            console.log("response = " +response.data);
             const timestamps = response.data.chart.result[0].timestamp
             const values = response.data.chart.result[0].indicators.quote[0].low;
             
