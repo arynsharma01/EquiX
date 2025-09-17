@@ -76,7 +76,12 @@ popularRouter.get('/get-info', async (req: Request, res: Response) => {
             
             
             const dateTime = timestamps.map((value: number) => new Date(value * 1000).toLocaleString())
-            const closingValues = values.map((value: number) => parseFloat(value.toFixed(2)))
+            // const closingValues = values.map((value: number) => parseFloat(value.toFixed(2)))
+            const closingValues = values.map((value: number | null) => {
+  if (value == null) return 0; 
+  return parseFloat(value.toFixed(2));
+});
+
             const lastVolume = response.data.chart.result[0].indicators.quote[0].volume.slice(-1)[0];
             const close = response.data.chart.result[0].indicators.quote[0].low.at(-1)
             const open = response.data.chart.result[0].indicators.quote[0].low[0]
