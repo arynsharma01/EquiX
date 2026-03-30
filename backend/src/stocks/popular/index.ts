@@ -257,7 +257,8 @@ popularRouter.get('/market/status', async (req: Request, res: Response) => {
         console.log(e);
 
         return res.status(400).json({
-            message: "some internal error"
+            message: "some internal error",
+            'error' : e 
         })
     }
 })
