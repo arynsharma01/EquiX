@@ -193,7 +193,8 @@ popularRouter.get('/search/result', async (req: Request, res: Response) => {
     }
     catch (e) {
         return res.status(400).json({
-            message: "not found/ internal error "
+            message: "not found/ internal error ",
+            'error' : e 
         })
     }
 })
