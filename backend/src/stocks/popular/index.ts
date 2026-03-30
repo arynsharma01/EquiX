@@ -192,6 +192,7 @@ popularRouter.get('/search/result', async (req: Request, res: Response) => {
         })
     }
     catch (e) {
+        console.log(e)
         return res.status(400).json({
             message: "not found/ internal error ",
             'error' : e 
@@ -201,6 +202,8 @@ popularRouter.get('/search/result', async (req: Request, res: Response) => {
 
 
 popularRouter.get('/market/status', async (req: Request, res: Response) => {
+    console.log("inside the maeket status ")
+    
     type allData = {
         symbol: string,
         value: number,
@@ -244,7 +247,7 @@ popularRouter.get('/market/status', async (req: Request, res: Response) => {
                     );
                 })
             );
-
+        console.log("response is okay")
         
         return res.status(200).json({
             message: "ok",
